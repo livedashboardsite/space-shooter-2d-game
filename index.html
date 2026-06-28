@@ -164,17 +164,74 @@ canvas { display: block; cursor: crosshair; }
 }
 #countdownLabel { font-size:14px; color:#ffffff88; letter-spacing:4px; margin-top:20px; }
 /* ---- DEATH SCREEN ---- */
-#deathScreen { background: rgba(0,0,0,0.93); }
-.death-title { font-size:22px; color:#ff2222; text-shadow:0 0 20px #ff2222; margin-bottom:8px; }
-.death-name  { font-size:14px; color:#ffaaaa; margin-bottom:32px; }
-.stats-box {
-  border:1px solid #ff444488; padding:20px 30px; margin-bottom:28px;
-  background:rgba(255,0,0,0.07); min-width:360px;
+#deathScreen {
+  background: rgba(0,0,0,0.0);
+  pointer-events: none;
 }
-.stat-row { font-size:9px; color:#ffaaaa; margin:8px 0; display:flex; justify-content:space-between; gap:30px; }
-.stat-val { color:#ffffff; }
-.death-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
-.death-btns .neon-btn { font-size:9px; padding:10px 18px; }
+#deathScreen.visible { pointer-events: all; }
+/* Centered popup card */
+.death-popup {
+  background: linear-gradient(160deg,#0a0010,#180020,#0a0010);
+  border: 2px solid #ff2222;
+  box-shadow: 0 0 60px #ff000066, 0 0 120px #ff000022, inset 0 0 30px #ff000011;
+  padding: 36px 44px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+  min-width: 420px; max-width: 520px;
+  position: relative;
+  border-radius: 4px;
+}
+.death-title {
+  font-size:20px; color:#ff2222;
+  text-shadow:0 0 20px #ff2222, 0 0 40px #ff000088;
+  margin-bottom:6px; letter-spacing:3px;
+}
+.death-name {
+  font-size:11px; color:#ff8888; margin-bottom:24px; letter-spacing:2px;
+}
+.death-divider {
+  width:100%; height:1px;
+  background:linear-gradient(90deg,transparent,#ff444466,transparent);
+  margin-bottom:18px;
+}
+.stats-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px 24px; margin-bottom:24px; width:100%;
+}
+.stat-item {
+  display:flex; flex-direction:column; gap:4px;
+  background:rgba(255,0,0,0.06); border:1px solid #ff222222;
+  padding:8px 12px; border-radius:3px;
+}
+.stat-label { font-size:6px; color:#ff6666; letter-spacing:1px; }
+.stat-value { font-size:10px; color:#ffffff; text-shadow:0 0 8px #ffffff88; }
+.death-btns {
+  display:flex; flex-direction:column; gap:10px; width:100%;
+}
+.death-btn {
+  font-family:'Press Start 2P',monospace;
+  font-size:9px; padding:13px 20px;
+  border:1.5px solid; border-radius:3px;
+  cursor:pointer; letter-spacing:1px;
+  transition:all 0.18s; pointer-events:all;
+  width:100%; text-align:center;
+}
+.death-btn-continue {
+  border-color:#00ff88; color:#001a0d;
+  background:linear-gradient(90deg,#00ff88,#00cc66);
+  box-shadow:0 0 16px #00ff8866;
+}
+.death-btn-continue:hover { box-shadow:0 0 30px #00ff88; transform:scale(1.02); }
+.death-btn-startover {
+  border-color:#ffaa00; color:#ffaa00;
+  background:rgba(255,170,0,0.08);
+}
+.death-btn-startover:hover { background:rgba(255,170,0,0.18); box-shadow:0 0 20px #ffaa0066; transform:scale(1.02); }
+.death-btn-menu {
+  border-color:#ff4488; color:#ff4488;
+  background:rgba(255,68,136,0.08);
+}
+.death-btn-menu:hover { background:rgba(255,68,136,0.18); box-shadow:0 0 20px #ff448866; transform:scale(1.02); }
 .neon-btn {
   font-family:'Press Start 2P',monospace; font-size:11px; padding:12px 28px;
   border:2px solid #00ffff; background:rgba(0,255,255,0.1); color:#00ffff;
@@ -183,17 +240,11 @@ canvas { display: block; cursor: crosshair; }
 }
 .neon-btn:hover { background:rgba(0,255,255,0.25); box-shadow:0 0 25px #00ffff, 0 0 5px #00ffff inset; transform:scale(1.05); }
 .neon-btn:focus { outline:none; box-shadow:0 0 25px #00ffff, 0 0 5px #00ffff inset; }
-.btn-resume    { border-color:#00ff88; color:#00ff88; box-shadow:0 0 10px #00ff8855; }
-.btn-resume:hover { background:rgba(0,255,136,0.2); box-shadow:0 0 25px #00ff88; }
-.btn-startover { border-color:#ffaa00; color:#ffaa00; }
-.btn-startover:hover { background:rgba(255,170,0,0.2); box-shadow:0 0 25px #ffaa00; }
-.btn-menu  { border-color:#ff4488; color:#ff4488; }
-.btn-menu:hover { background:rgba(255,68,136,0.2); box-shadow:0 0 25px #ff4488; }
-@keyframes deathFadeIn {
-  from { opacity:0; transform:scale(0.96); }
-  to   { opacity:1; transform:scale(1); }
+@keyframes deathPopupIn {
+  from { opacity:0; transform:scale(0.88) translateY(20px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
 }
-#deathScreen.visible { animation:deathFadeIn 0.5s ease forwards; }
+.death-popup.show { animation:deathPopupIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 /* ---- HUD ---- */
 #hud {
   position:absolute; top:0; left:0; width:100%;
@@ -286,6 +337,24 @@ canvas { display: block; cursor: crosshair; }
 /* HS pulse */
 @keyframes hsPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
 .hud-best-badge.newhs { animation:hsPulse 0.4s ease 3; color:#00ff44 !important; text-shadow:0 0 12px #00ff44 !important; }
+/* Level complete overlay */
+#levelCompleteOverlay {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.0); pointer-events:none; z-index:65; gap:12px;
+}
+.lco-line1 {
+  font-size:18px; color:#00ffff; letter-spacing:4px;
+  text-shadow:0 0 20px #00ffff, 0 0 40px #0088ff;
+  opacity:0; transform:scale(0.8);
+  transition:opacity 0.3s, transform 0.3s;
+}
+.lco-line2 {
+  font-size:10px; color:#ffffff88; letter-spacing:3px;
+  opacity:0; transition:opacity 0.3s 0.15s;
+}
+#levelCompleteOverlay.show .lco-line1 { opacity:1; transform:scale(1); }
+#levelCompleteOverlay.show .lco-line2 { opacity:1; }
 /* Boss incoming message */
 #bossIncomingMsg {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -376,6 +445,11 @@ canvas { display: block; cursor: crosshair; }
   <div id="bossWarning"></div>
   <div id="bossIncomingMsg"></div>
   <div id="comboDisplay"></div>
+  <!-- Level complete overlay -->
+  <div id="levelCompleteOverlay">
+    <div class="lco-line1" id="lcoLine1">LEVEL 1 COMPLETE!</div>
+    <div class="lco-line2" id="lcoLine2">ADVANCING TO LEVEL 2</div>
+  </div>
   <!-- Pause overlay -->
   <div id="pauseOverlay">
     <div class="pause-title">PAUSED</div>
@@ -428,19 +502,33 @@ canvas { display: block; cursor: crosshair; }
   </div>
   <!-- Death Screen -->
   <div id="deathScreen" style="display:none;">
-    <div class="death-title">MISSION FAILED</div>
-    <div class="death-name" id="deathNameLabel">COMMANDER</div>
-    <div class="stats-box">
-      <div class="stat-row"><span>FINAL SCORE</span><span class="stat-val" id="dScore">0</span></div>
-      <div class="stat-row"><span>LEVEL REACHED</span><span class="stat-val" id="dLevel">1</span></div>
-      <div class="stat-row"><span>ENEMIES KILLED</span><span class="stat-val" id="dKills">0</span></div>
-      <div class="stat-row"><span>MAX COMBO</span><span class="stat-val" id="dCombo">0</span></div>
-      <div class="stat-row"><span>CHECKPOINT</span><span class="stat-val" id="dCheckpoint">LV 1 SAVED</span></div>
-    </div>
-    <div class="death-btns">
-      <button class="neon-btn btn-resume" id="resumeBtn">RESUME FROM LV1</button>
-      <button class="neon-btn btn-startover" id="startOverBtn">START OVER</button>
-      <button class="neon-btn btn-menu" id="menuBtn">MAIN MENU</button>
+    <div class="death-popup" id="deathPopup">
+      <div class="death-title">MISSION FAILED</div>
+      <div class="death-name" id="deathNameLabel">COMMANDER</div>
+      <div class="death-divider"></div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">FINAL SCORE</div>
+          <div class="stat-value" id="dScore">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">LEVEL REACHED</div>
+          <div class="stat-value" id="dLevel">1</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">ENEMIES KILLED</div>
+          <div class="stat-value" id="dKills">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">MAX COMBO</div>
+          <div class="stat-value" id="dCombo">0</div>
+        </div>
+      </div>
+      <div class="death-btns">
+        <button class="death-btn death-btn-continue" id="resumeBtn">▶ CONTINUE FROM LEVEL 1</button>
+        <button class="death-btn death-btn-startover" id="startOverBtn">↺ RESTART — START OVER</button>
+        <button class="death-btn death-btn-menu" id="menuBtn">⌂ MAIN MENU</button>
+      </div>
     </div>
   </div>
 </div>
@@ -468,8 +556,8 @@ function playTone(freq,type,duration,vol=0.3,fadeOut=true) {
     osc.start(); osc.stop(ac.currentTime+duration);
   } catch(e){}
 }
-function playShoot()     { playTone(880,'square',0.08,0.15); }
-function playExplosion() {
+function playShoot()     { if(deathSfxPlaying) return; playTone(880,'square',0.08,0.15); }
+function playExplosion() { if(deathSfxPlaying) return;
   try {
     const ac=getAudio();
     const buf=ac.createBuffer(1,ac.sampleRate*0.3,ac.sampleRate);
@@ -482,10 +570,41 @@ function playExplosion() {
     src.start();
   } catch(e){}
 }
-function playPowerup() { [440,550,660,880].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',0.15,0.3),i*80)); }
-function playDamage()  { playTone(150,'sawtooth',0.2,0.4); }
+function playPowerup() { if(deathSfxPlaying) return; [440,550,660,880].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',0.15,0.3),i*80)); }
+function playDamage()  { if(deathSfxPlaying) return; playTone(150,'sawtooth',0.2,0.4); }
 function playLevelUp() { [440,550,660,770,880].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',0.2,0.3),i*100)); }
 function playBossArrive() { [110,110,220,110,110,165].forEach((f,i)=>setTimeout(()=>playTone(f,'sawtooth',0.3,0.5),i*150)); }
+
+// Death SFX: "ta - ta ta ta tata - taa" rhythm
+function playDeathSfx() {
+  deathSfxPlaying = true;
+  try {
+    const ac = getAudio();
+    // Pattern: ta(0) - gap - ta(180) ta(280) ta(380) tata(460,510) - taa(620,long)
+    const hits = [
+      {t:0,   freq:180, dur:0.12, vol:0.5, type:'sawtooth'},
+      {t:180, freq:140, dur:0.09, vol:0.4, type:'sawtooth'},
+      {t:280, freq:140, dur:0.09, vol:0.4, type:'sawtooth'},
+      {t:380, freq:140, dur:0.09, vol:0.4, type:'sawtooth'},
+      {t:460, freq:160, dur:0.07, vol:0.35, type:'sawtooth'},
+      {t:510, freq:160, dur:0.07, vol:0.35, type:'sawtooth'},
+      {t:620, freq:100, dur:0.35, vol:0.5, type:'sawtooth'},
+    ];
+    hits.forEach(h => {
+      setTimeout(() => {
+        try {
+          const osc=ac.createOscillator(), g=ac.createGain();
+          osc.type=h.type; osc.frequency.value=h.freq;
+          g.gain.setValueAtTime(h.vol, ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+h.dur);
+          osc.connect(g); g.connect(ac.destination);
+          osc.start(); osc.stop(ac.currentTime+h.dur);
+        } catch(e){}
+      }, h.t);
+    });
+    setTimeout(()=>{ deathSfxPlaying = false; }, 1100);
+  } catch(e){ deathSfxPlaying = false; }
+}
 // ---- Background Music Engine ----
 let bgMusic = { nodes:[], intervals:[] };
 function stopBgMusic() {
@@ -516,19 +635,20 @@ function startBgMusic(type) {
       bgMusic.nodes.push(lfo);
     }
     if (type==='menu') {
-      // Pad: slow chord
-      mkOsc(110,'sine',0.03); mkOsc(165,'sine',0.03); mkOsc(220,'sine',0.03);
-      // Melody arpeggio
-      const melNotes=[330,370,440,494,440,370,330,294]; let mi=0;
+      // High-energy home screen: driving bass + chord pad + fast arpeggio
+      mkOsc(55,'sawtooth',0.035); mkOsc(110,'sawtooth',0.025);
+      const pad1=mkOsc(220,'square',0.018); const pad2=mkOsc(330,'square',0.014);
+      mkLfo(pad1.g.gain,1.2,0.01,0.018); mkLfo(pad2.g.gain,1.5,0.008,0.014);
+      const melNotes=[440,550,660,550,440,330,440,550,660,880,660,550]; let mi=0;
       const iv=setInterval(()=>{
         try {
           const osc=ac.createOscillator(), g=ac.createGain();
-          osc.type='triangle'; osc.frequency.value=melNotes[mi%melNotes.length]; mi++;
-          g.gain.setValueAtTime(0.06,ac.currentTime);
-          g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.35);
-          osc.connect(g); g.connect(ac.destination); osc.start(); osc.stop(ac.currentTime+0.35);
+          osc.type='square'; osc.frequency.value=melNotes[mi%melNotes.length]; mi++;
+          g.gain.setValueAtTime(0.07,ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.22);
+          osc.connect(g); g.connect(ac.destination); osc.start(); osc.stop(ac.currentTime+0.22);
         } catch(e){}
-      },400);
+      },220);
       bgMusic.intervals.push(iv);
     } else if (type==='space') {
       // Sub-bass drone
@@ -589,6 +709,10 @@ function startBgMusic(type) {
   } catch(e){}
 }
 // ---- Game State ----
+const MAX_LEVEL = 20;
+// Kills needed per level to advance (scales with level)
+function killsNeededForLevel(lv) { return 10 + lv * 4; }
+
 let state = 'landing';
 let playerName = 'COMMANDER';
 let atmosphere = 'space';
@@ -598,6 +722,7 @@ let level = 1;
 let checkpoint = 1;
 let totalKills = 0;
 let sessionKills = 0;
+let levelKills = 0;          // kills within current level (for progress bar)
 let maxCombo = 0;
 let comboCount = 0;
 let comboTimer = 0;
@@ -617,6 +742,7 @@ let bossKillTimer = 0;
 let bossKillBx = 0;
 let bossKillBy = 0;
 let selectedAtmo = 'space';
+let deathSfxPlaying = false;
 
 // ---- Player ----
 let player = {
@@ -1089,9 +1215,11 @@ function triggerGameOver() {
   document.getElementById('pauseOverlay').style.display='none';
   stopBgMusic();
   deathExpX=player.x; deathExpY=player.y;
+  player.hp=0; // hide ship in drawPlayer (hp=0 check)
   if(score>highScore){highScore=score;localStorage.setItem('novaStrikeHS',highScore);}
+  playDeathSfx();
   startDeathExplosion(deathExpX,deathExpY);
-  // Run explosion loop
+  // Run explosion loop — ship hidden since gameRunning=false
   function expLoop() {
     if(!deathExplosionActive) return;
     drawBgLayers();
@@ -1103,19 +1231,23 @@ function triggerGameOver() {
 }
 
 function gameOverShowScreen() {
-  document.getElementById('deathNameLabel').textContent=playerName.toUpperCase();
+  document.getElementById('deathNameLabel').textContent='CDR. '+playerName.toUpperCase();
   document.getElementById('dScore').textContent=score;
-  document.getElementById('dLevel').textContent=level;
+  document.getElementById('dLevel').textContent='LEVEL '+level;
   document.getElementById('dKills').textContent=totalKills;
   document.getElementById('dCombo').textContent=maxCombo+'x';
-  document.getElementById('dCheckpoint').textContent='LV '+checkpoint+' SAVED';
-  document.getElementById('resumeBtn').textContent='RESUME FROM LV'+checkpoint;
+  // Dynamic continue button — reads exact level where player died
+  document.getElementById('resumeBtn').textContent='▶ CONTINUE FROM LEVEL '+level;
   const ds=document.getElementById('deathScreen');
-  ds.style.display='flex'; ds.classList.remove('visible');
-  void ds.offsetWidth; ds.classList.add('visible');
+  const dp=document.getElementById('deathPopup');
+  ds.style.display='flex';
+  dp.classList.remove('show');
+  void dp.offsetWidth;
+  dp.classList.add('show');
   document.getElementById('hud').style.display='none';
   document.getElementById('bossBar').style.display='none';
   document.getElementById('comboDisplay').style.opacity='0';
+  document.getElementById('levelCompleteOverlay').style.display='none';
   mouseDown=false;
 }
 
