@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +16,13 @@ body {
   min-height: 100vh;
   font-family: 'Press Start 2P', monospace;
   overflow: hidden;
+  gap: 20px;
 }
 #gameContainer {
   position: relative;
   width: 800px;
   height: 600px;
+  flex-shrink: 0;
 }
 canvas { display: block; cursor: crosshair; }
 #crtOverlay {
@@ -33,6 +36,54 @@ canvas { display: block; cursor: crosshair; }
   );
   z-index: 100;
 }
+
+/* ---- SIDE PANELS ---- */
+.side-panel {
+  width: 250px;
+  background: rgba(5, 5, 10, 0.85);
+  border: 2px dashed #00ffff44;
+  border-radius: 6px;
+  padding: 20px;
+  color: #fff;
+  font-size: 8px;
+  line-height: 2.2;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.05), inset 0 0 10px rgba(0, 255, 255, 0.05);
+  z-index: 10;
+}
+.side-panel h2 {
+  font-size: 11px;
+  color: #00ffff;
+  text-shadow: 0 0 8px #00ffff;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #00ffff33;
+  padding-bottom: 8px;
+}
+.side-panel ul {
+  list-style: none;
+}
+.side-panel li {
+  margin-bottom: 15px;
+}
+.side-panel .key-highlight {
+  color: #ffff00;
+  text-shadow: 0 0 5px #ffff00;
+}
+.side-panel .power-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Hide side panels if screen is too small */
+@media (max-width: 1340px) {
+  .side-panel {
+    display: none;
+  }
+}
+
 /* ---- LANDING SCREEN ---- */
 #landingScreen, #atmoScreen, #countdownScreen, #deathScreen {
   position: absolute; top: 0; left: 0;
@@ -243,6 +294,20 @@ canvas { display: block; cursor: crosshair; }
 </style>
 </head>
 <body>
+
+<!-- LEFT SIDE PANEL: INSTRUCTIONS -->
+<div class="side-panel">
+  <h2>INSTRUCTIONS</h2>
+  <ul>
+    <li>• SELECT A BATTLEFIELD THEME TO DEPLOY.</li>
+    <li>• ELIMINATE ENEMY FORMATIONS TO ADVANCE.</li>
+    <li>• EACH KILL CHARGES THE LEVEL PROGRESSION BAR.</li>
+    <li>• PRESERVE SQUAD STREAKS TO BUILD A <span class="key-highlight">COMBO MULTIPLIER</span>.</li>
+    <li>• AN ELITE <span class="key-highlight">BOSS SHIP</span> ARRIVES EVERY 40 SECONDS.</li>
+    <li>• FLY OVER NEON CAPSULES TO GRAB SPECIAL MODS.</li>
+  </ul>
+</div>
+
 <div id="gameContainer">
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div id="crtOverlay"></div>
@@ -338,6 +403,23 @@ canvas { display: block; cursor: crosshair; }
       </div>
     </div>
   </div>
+</div>
+
+<!-- RIGHT SIDE PANEL: CONTROLS -->
+<div class="side-panel">
+  <h2>CONTROLS</h2>
+  <ul>
+    <li>• <span class="key-highlight">W,A,S,D</span> / <span class="key-highlight">ARROW KEYS</span><br>&nbsp;&nbsp;NAVIGATE STARSHIP</li>
+    <li>• <span class="key-highlight">SPACEBAR</span> / <span class="key-highlight">LEFT CLICK</span><br>&nbsp;&nbsp;FIRE LASER CANNONS</li>
+    <li>• <span class="key-highlight">P KEY</span><br>&nbsp;&nbsp;PAUSE / UNPAUSE ENGINE</li>
+  </ul>
+  <h2 style="font-size:9px; margin-top:25px; margin-bottom:10px;">POWERUPS</h2>
+  <ul>
+    <li class="power-item">⚡ <span style="color:#ffff00;">RAPID FIRE</span></li>
+    <li class="power-item">🛡 <span style="color:#00ffff;">SHIELD MOD</span></li>
+    <li class="power-item">💥 <span style="color:#ff4444;">NUKE DETONATOR</span></li>
+    <li class="power-item">❄️ <span style="color:#88ddff;">CRYO FREEZE</span></li>
+  </ul>
 </div>
 
 <script>
@@ -497,6 +579,7 @@ function playTone(freq, type, duration, vol = 0.3) {
 
 function playShoot()     { if (deathSfxPlaying) return; playTone(880,'square',0.08,0.15); }
 function playDamage()    { if (deathSfxPlaying) return; playTone(150,'sawtooth',0.2,0.4); }
+function playLevelUp()   { [440,550,660,770,880].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.2,0.3), i*100)); }
 function playLevelUp()   { [440,550,660,770,880].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.2,0.3), i*100)); }
 function playBossArrive(){ [110,110,220,110,110,165].forEach((f,i) => setTimeout(() => playTone(f,'sawtooth',0.3,0.5), i*150)); }
 function playPowerup()   { if (deathSfxPlaying) return; [440,550,660,880].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.15,0.3), i*80)); }
