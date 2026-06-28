@@ -1,17 +1,3 @@
-# 🚀 NOVA STRIKE — 2D Space Shooter
-
-<div align="center">
-
-<!-- ANIMATED / DYNAMIC LIVE DEMO BUTTONS -->
-[![Live Demo](https://img.shields.io/badge/▶__LIVE_DEMO__-__PLAY_NOW__-ff0055?style=for-the-badge&logo=rocket&logoColor=white)](https://livedashboardsite.github.io/space-shooter-2d-game/)
-[![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub_Pages-181717?style=for-the-badge&logo=github&logoColor=white)](https://livedashboardsite.github.io/space-shooter-2d-game/)
-
-<br/>
-
-> ⚡ **Built Live During:** Vedam School of Technology × Amazon AI BootCamp 2 (June 28, 2026)  
-> 🎓 **Mentored By:** **Tanishq Gupta** (SDE-2, Amazon)
-
----
 
 ### # 🚀 NOVA STRIKE — 2D Space Shooter
 
