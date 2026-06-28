@@ -1,0 +1,81 @@
+Create a single file index.html game called "NOVA STRIKE" with the following features:
+
+## INTRO FLOW
+1. Landing screen with animated background, glowing game title "NOVA STRIKE"
+2. Input field: "Enter your name, Commander" — typed name is used throughout the game
+3. After name is entered, show atmosphere selection screen with 3 modes:
+   - SPACE: black bg, stars, asteroid enemies, rocket spaceship
+   - EARTH: blue sky, clouds, fighter jet ship, plane/missile enemies  
+   - FANTASY: purple magic sky, dragon rider ship, fireball/creature enemies
+4. After selection, show a full-screen countdown: 3... 2... 1... LAUNCH! with dramatic animation
+5. Game begins
+
+## PLAYER & HEALTH
+- Player ship looks realistic for the chosen atmosphere (not a triangle)
+- Health system: 100 HP shown as a health bar at top
+- Normal asteroid/enemy hit: -25 HP (so 4 hits = death)
+- Boss hit: -50 HP
+- Health bar changes color: green (100-60), yellow (59-30), red (29-0)
+- When HP = 0, show death screen
+
+## ENEMIES & OBSTACLES
+- SPACE mode: asteroids of different sizes, fast moving, rotate while moving
+- EARTH mode: enemy planes, missiles coming from top and sides
+- FANTASY mode: fireballs, flying creatures with different movement patterns
+- 3 enemy types in all modes: basic (fast, weak), zigzag (unpredictable), armored (slow, takes 3 hits, shows HP)
+- Boss enemy every 45 seconds: much bigger, shoots back, has its own HP bar
+
+## LEVEL SYSTEM
+- Levels shown as a progress bar at top of screen (like XP bar)
+- Level increases every 500 points
+- Each level: enemies get faster, spawn more frequently
+- Level label shown: "LEVEL 3" clearly on HUD
+- CHECKPOINT SYSTEM: if player dies at level 3, game restarts from level 3 (not level 1). Score resets but level is saved as checkpoint. Show "Resuming from Level 3" on death screen.
+
+## SUPERPOWERS (drop from sky randomly, collect by flying over)
+1. ⚡ RAPID FIRE (yellow thunderbolt icon) — doubles fire rate for 6 seconds
+2. 🛡 SHIELD BUBBLE (cyan circle icon) — blocks all damage for 5 seconds, visible bubble around ship
+3. 💥 NUKE (red explosion icon) — instantly destroys ALL enemies on screen with big explosion animation
+4. ❄️ FREEZE (blue snowflake icon) — slows all enemies to 20% speed for 5 seconds, enemies tint blue
+
+## HUD (top bar)
+- Left: HP bar with color change
+- Center: Level progress bar + "LEVEL X" label  
+- Right: Score
+- Bottom left: "CDR. [NAME]" 
+- Bottom right: "BEST: [highscore]"
+- Active superpower icon + countdown timer shown below HP bar
+
+## VISUAL STYLE
+- Font: Press Start 2P from Google Fonts
+- CRT scanline overlay on entire game
+- Neon glow on all UI elements
+- Each atmosphere has completely different color palette:
+  - Space: deep black, electric blue, white stars
+  - Earth: sky blue, green accents, white clouds
+  - Fantasy: deep purple, pink/gold magic particles
+- Parallax star/cloud/particle background (2 layers moving at different speeds)
+- Screen shake when player takes damage
+- Particle explosions when enemies die (color matches enemy type)
+
+## DEATH / GAME OVER SCREEN
+- Shows: "MISSION FAILED, [NAME]"
+- Stats: Final Score, Level Reached, Enemies Killed, Max Combo, Checkpoint saved
+- Two buttons: "RESUME FROM LV[X]" and "START OVER" and "MAIN MENU"
+
+## COMBO SYSTEM
+- Kill 3+ enemies quickly = combo multiplier (2x, 3x etc)
+- Combo shown in center of screen with glow effect
+- Combo resets if no kill within 1.5 seconds
+
+## SOUND
+- All sounds using Web Audio API (no external files)
+- Shoot sound, explosion sound, powerup collect, boss arrival, damage taken, level up jingle
+- Each atmosphere has different background tone/drone
+
+## TECHNICAL
+- Single index.html file, no external dependencies except Google Fonts
+- Works in Chrome browser
+- Keyboard controls: Arrow keys or WASD to move, SPACE to shoot
+- Responsive canvas 800x600 centered on screen
+- Save highscore to localStorage
