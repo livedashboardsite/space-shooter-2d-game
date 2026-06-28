@@ -283,22 +283,6 @@ canvas { display: block; cursor: crosshair; }
 }
 .pause-title { font-size:32px; color:#00ffff; text-shadow:0 0 20px #00ffff; letter-spacing:6px; }
 .pause-hint  { font-size:9px; color:#ffffff66; letter-spacing:3px; }
-/* Level transition */
-#levelTransitionScreen {
-  position:absolute; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.93); display:none;
-  flex-direction:column; align-items:center; justify-content:center;
-  z-index:70; gap:16px;
-}
-.lt-line1 { font-size:20px; color:#00ffff; text-shadow:0 0 20px #00ffff; letter-spacing:4px; text-align:center; }
-.lt-line2 { font-size:11px; color:#ffffff88; letter-spacing:3px; text-align:center; }
-@keyframes scanSweep {
-  0%   { clip-path:inset(100% 0 0 0); opacity:0; }
-  40%  { opacity:1; }
-  100% { clip-path:inset(0 0 0 0); opacity:1; }
-}
-.lt-line1, .lt-line2 { animation:scanSweep 0.7s ease forwards; }
-.lt-line2 { animation-delay:0.35s; opacity:0; animation-fill-mode:both; }
 /* HS pulse */
 @keyframes hsPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
 .hud-best-badge.newhs { animation:hsPulse 0.4s ease 3; color:#00ff44 !important; text-shadow:0 0 12px #00ff44 !important; }
@@ -356,11 +340,6 @@ canvas { display: block; cursor: crosshair; }
     <div class="pause-title">PAUSED</div>
     <div class="pause-hint">PRESS P TO RESUME</div>
     <button class="neon-btn" id="resumePauseBtn" style="margin-top:10px;pointer-events:all;">RESUME</button>
-  </div>
-  <!-- Level transition -->
-  <div id="levelTransitionScreen">
-    <div class="lt-line1" id="ltLine1">LEVEL COMPLETE!</div>
-    <div class="lt-line2" id="ltLine2">PREPARING NEXT LEVEL...</div>
   </div>
   <!-- Landing Screen -->
   <div id="landingScreen">
@@ -601,7 +580,6 @@ let spawnTimer = 0;
 let powerDropTimer = 0;
 let gameRunning = false;
 let gamePaused = false;
-let levelTransition = false;
 let bossIncomingWarned = false;
 
 // ---- Player ----
@@ -997,34 +975,6 @@ function updateBoss() {
     }
   }
 }
-// ---- Level Transition ----
-function doLevelTransition() {
-  levelTransition=true;
-  enemies=[]; enemyBullets=[]; playerBullets=[];
-  document.getElementById('bossBar').style.display='none';
-  const lt=document.getElementById('levelTransitionScreen');
-  document.getElementById('ltLine1').textContent='LEVEL '+level+' COMPLETE!';
-  document.getElementById('ltLine2').textContent='PREPARING LEVEL '+(level+1)+'...';
-  // Reset animations
-  const l1=document.getElementById('ltLine1'), l2=document.getElementById('ltLine2');
-  l1.style.animation='none'; l2.style.animation='none';
-  void l1.offsetWidth; void l2.offsetWidth;
-  l1.style.animation=''; l2.style.animation='';
-  lt.style.display='flex';
-  setTimeout(()=>{
-    lt.style.display='none';
-    level++;
-    checkpoint=level;
-    bossTimer=0;
-    bossActive=false; boss=null;
-    bossIncomingWarned=false;
-    spawnTimer=0;
-    levelTransition=false;
-    playLevelUp();
-    spawnParticles(W/2,H/2,ATMO[atmosphere].particleColors,50,9);
-  },3000);
-}
-
 function handleBossDeath() {
   if(!boss) return;
   spawnParticles(boss.x,boss.y,ATMO[atmosphere].particleColors,60,10);
@@ -1032,8 +982,10 @@ function handleBossDeath() {
   playExplosion();
   triggerShake(10,40);
   bossActive=false; boss=null;
+  bossTimer=0;
+  bossIncomingWarned=false;
   document.getElementById('bossBar').style.display='none';
-  doLevelTransition();
+  checkLevel();
 }
 
 // ---- Player Death Explosion ----
@@ -1298,7 +1250,7 @@ function triggerShake(amt,dur) { shakeAmt=amt; shakeTimer=dur; }
 // ---- Level system ----
 function checkLevel() {
   const newLevel=1+Math.floor(score/500);
-  if(newLevel>level&&!levelTransition) {
+  if(newLevel>level) {
     level=newLevel; checkpoint=level;
     playLevelUp();
     spawnParticles(W/2,H/2,ATMO[atmosphere].particleColors,40,8);
@@ -1336,7 +1288,7 @@ function showBossIncomingMsg() {
 
 // ---- Main Update Loop ----
 function updateGame() {
-  if(!gameRunning||levelTransition) return;
+  if(!gameRunning) return;
   frameCount++;
   if(shakeTimer>0) shakeTimer--; else shakeAmt=0;
 
@@ -1421,31 +1373,31 @@ function updateGame() {
     }
   }
 
-  // Spawn enemies (not during level transition)
-  if(!levelTransition) {
-    spawnTimer--;
-    const spawnRate=Math.max(15,70-level*5);
-    if(spawnTimer<=0) {
-      spawnTimer=spawnRate;
-      const r=Math.random();
-      if(r<0.5) spawnEnemy('basic'); else if(r<0.8) spawnEnemy('zigzag'); else spawnEnemy('armored');
-      if(level>=3&&Math.random()<0.4) spawnEnemy('basic');
-      if(level>=5&&Math.random()<0.3) spawnEnemy('zigzag');
-    }
+  // Spawn enemies
+  spawnTimer--;
+  const spawnRate=Math.max(15,70-level*5);
+  if(spawnTimer<=0) {
+    spawnTimer=spawnRate;
+    const r=Math.random();
+    if(r<0.5) spawnEnemy('basic'); else if(r<0.8) spawnEnemy('zigzag'); else spawnEnemy('armored');
+    if(level>=3&&Math.random()<0.4) spawnEnemy('basic');
+    if(level>=5&&Math.random()<0.3) spawnEnemy('zigzag');
   }
 
-  // Boss timer — 45 seconds = 45*60=2700 frames
-  if(!bossActive&&!levelTransition) {
+  // Boss timer — 45 seconds = 2700 frames
+  if(!bossActive) {
     bossTimer++;
-    // Boss incoming warning: 2s before = 120 frames before 2700
     if(!bossIncomingWarned&&bossTimer>=2700-120) showBossIncomingMsg();
     if(bossTimer>=2700){bossTimer=0;spawnBoss();}
   }
   updateBoss();
 
-  // Powerup spawning
+  // Powerup spawning — drop every 8-12 seconds (480-720 frames)
   powerDropTimer--;
-  if(powerDropTimer<=0){powerDropTimer=400+Math.random()*300;spawnPowerup();}
+  if(powerDropTimer<=0){
+    powerDropTimer=480+Math.floor(Math.random()*240);
+    spawnPowerup();
+  }
   for(let i=powerups.length-1;i>=0;i--){
     const p=powerups[i]; p.y+=p.vy;
     if(p.y>H+40){powerups.splice(i,1);continue;}
@@ -1486,12 +1438,11 @@ function startGameFrom(fromLevel) {
   level=fromLevel; sessionKills=0;
   comboCount=0; comboTimer=0; maxCombo=0;
   bossTimer=0; bossActive=false; boss=null;
-  frameCount=0; spawnTimer=40; powerDropTimer=300;
+  frameCount=0; spawnTimer=40; powerDropTimer=180;
   shakeTimer=0; shakeAmt=0; mouseDown=false; gamePaused=false;
-  levelTransition=false; bossIncomingWarned=false;
+  bossIncomingWarned=false;
   document.getElementById('pauseOverlay').style.display='none';
   document.getElementById('bossBar').style.display='none';
-  document.getElementById('levelTransitionScreen').style.display='none';
   document.getElementById('comboDisplay').style.opacity='0';
   document.getElementById('powerupHud').innerHTML='';
   document.getElementById('bossIncomingMsg').style.opacity='0';
