@@ -1,170 +1,128 @@
-# 🚀 NOVA STRIKE — Galactic Defense System
+# 🚀 NOVA STRIKE — 2D Space Shooter
 
-> Built during **Vedam School of Technology × Amazon AI BootCamp 2** (June 28, 2026)  
-> Mentored by **Tanishq Gupta** (SDE-2, Amazon)
+<div align="center">
+
+<!-- ANIMATED / DYNAMIC LIVE DEMO BUTTONS -->
+[![Live Demo](https://img.shields.io/badge/▶__LIVE_DEMO__-__PLAY_NOW__-ff0055?style=for-the-badge&logo=rocket&logoColor=white)](https://livedashboardsite.github.io/space-shooter-2d-game/)
+[![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub_Pages-181717?style=for-the-badge&logo=github&logoColor=white)](https://livedashboardsite.github.io/space-shooter-2d-game/)
+
+<br/>
+
+> ⚡ **Built Live During:** Vedam School of Technology × Amazon AI BootCamp 2 (June 28, 2026)  
+> 🎓 **Mentored By:** **Tanishq Gupta** (SDE-2, Amazon)
+
+---
+
+### 🌌 [CLICK HERE TO LAUNCH THE GAME DIRECTLY IN YOUR BROWSER] 🌌
+*(No downloads, no installs. Pure HTML5/JavaScript magic.)*
+
+</div>
 
 ---
 
 ## 🎮 What Is This?
 
-**Nova Strike** is a fully browser-playable 2D space shooter game — no downloads, no installs, just open `index.html` in Chrome and play. It was built from scratch using HTML, CSS, and JavaScript as part of a live 2.5-hour AI BootCamp session where participants learned to break down complex problems into smaller components and use AI tools to ship real software fast.
+**Nova Strike** is a fully browser-playable 2D space shooter game built from scratch using HTML, CSS, and JavaScript. 
+
+Developed during a rigorous live 2.5-hour AI BootCamp session, this project demonstrates the power of **"vibe coding"**—breaking complex game mechanics down into micro-components and using AI tools to iterate, debug, and ship production-ready software at lightning speed.
 
 ---
 
-## ✨ Features
+## ✨ Features Breakdown
 
 ### 🛸 Three Unique Atmospheres
+Every single mode shifts the entire aesthetic of the game dynamically.
+
 | Mode | Vehicle | Enemies | Vibe |
-|------|---------|---------|------|
-| **Space** | Rocket ship | Alien ships | Deep cosmos, stars |
-| **Earth** | Fighter jet | Enemy planes | Sky combat, clouds |
-| **Fantasy** | Dragon rider | Magical creatures | Mystic realm, orbs |
+|:---:|---|---|---|
+| **🌌 Space** | Rocket ship | Alien ships | Deep cosmos, stars, cold neon |
+| **🌍 Earth** | Fighter jet | Enemy planes | Sky combat, rushing clouds, tactical |
+| **🔮 Fantasy** | Dragon rider | Magical creatures | Mystic realm, glowing orbs, ethereal |
 
-Each atmosphere has its **own visual style, enemy designs, bullet colors, and background music.**
+> 🎨 **Atmosphere Isolation:** Each mode has its **own custom visual style, enemy designs, bullet configurations, and dedicated background music.**
 
-### 💀 Game Over Pop-up — 3 Exact Buttons
-When your spaceship is destroyed (by enemy damage, collision, or a Boss):
+### 💀 Smart "Game Over" Matrix
+When your ship is taken down (via enemy projectile, direct collision, or an aggressive Boss encounter), a custom menu overlay animates into view with three precise routing paths:
 
-- **▶ CONTINUE FROM LEVEL [X]** — Dynamically shows the exact level you died on. Restarts that level with full HP; your score checkpoint is preserved.
-- **⌂ MAIN MENU** — Returns to the home screen instantly. Your name stays in the input field so you can start a new session or change your name.
-- **↺ RESTART — START OVER** — Full reset: Level 1, Score 0, fresh start.
+*   **`▶ CONTINUE FROM LEVEL [X]`** — *The Checkpoint System.* Dynamically detects the exact level you died on. Restarts that level with full HP while preserving your score checkpoint.
+*   **`⌂ MAIN MENU`** — *The Return.* Safely routes you back to the home screen instantly. Keeps your pilot name cached in the input field for fast re-entry.
+*   **`↺ RESTART — START OVER`** — *The Hard Reset.* Wipes the slate completely clean: Level 1, Score 0, fresh seed.
 
 ### 📊 Kill-Based Level Progression (20 Levels)
-- The **level progress bar fills based on enemy kills**, not score — kills needed scale with level (`10 + level × 4`)
-- Level 1 needs **14 kills**, Level 20 needs **90 kills**
-- When the bar fills: **"LEVEL X COMPLETE!"** banner fires → bar resets → Level X+1 begins
-- At Level 20: **Endless combat mode** — difficulty stays maxed
+Forget traditional score-grinding. Leveling up requires tactical execution:
+*   The **level progress bar fills strictly based on enemy kills**, scaling systematically via the formula:
+    $$killsNeeded = 10 + (level \times 4)$$
+*   **Level 1** requires **14 kills** $\rightarrow$ **Level 20** requires **90 kills**.
+*   Filling the bar fires a flashing, non-blocking **"LEVEL X COMPLETE!"** graphical banner, resets the meter, and advances the game state.
+*   Reaching **Level 20** unlocks **Endless Combat Mode** where enemy attributes stay maxed out.
 
-### ⚡ Dynamic Difficulty (Level 1 → 20)
-| Mechanic | Level 1 | Level 20 |
+### ⚡ Dynamic Difficulty Scaling (Level 1 $\rightarrow$ 20)
+The engine smoothly scales game state variables linearly across 20 levels:
+
+| System Mechanic | Level 1 (Baseline) | Level 20 (Max Chaos) |
 |---|---|---|
-| Enemy speed multiplier | 1.0× | 2.8× |
-| Spawn interval | ~67 frames | 10 frames (minimum) |
-| Armored enemy frequency | 15% | 50%+ |
-| Boss HP | 23 | 175 |
-| Boss fire rate | Every 84 frames | Every 10 frames |
-| Boss spawn interval | 40 seconds | ~25 seconds |
+| **Enemy Speed Multiplier** | $1.0\times$ | $2.8\times$ |
+| **Spawn Interval** | ~67 frames | 10 frames *(Hard Minimum)* |
+| **Armored Enemy Frequency** | $15\%$ | $50\%+$ |
+| **Boss Health Points (HP)** | $23\text{ HP}$ | $175\text{ HP}$ |
+| **Boss Fire Rate** | Every 84 frames | Every 10 frames |
+| **Boss Spawn Interval** | 40 seconds | ~25 seconds |
 
-### 🎵 Layered Audio System — No Overlapping
-Four completely distinct BGM tracks, each with its own character:
+### 🎵 Layered Audio System (Zero Overlap Guarantee)
+The game runs on a strict audio routing lifecycle utilizing **four native Web Audio API synthesizer tracks**:
 
-| Track | When it plays | Style |
-|---|---|---|
-| `menu` | Home screen | High-energy driving synth — punchy bass, fast arpeggios, chord stabs |
-| `space` | Space mode in-game | Eerie drone — sub-bass, tremolo pulse, slow cosmic arpeggios |
-| `earth` | Earth mode in-game | Aerial combat — punchy bass, fast staccato lead melody |
-| `fantasy` | Fantasy mode in-game | Orchestral — vibrato strings, harp cascades, orchestral bass |
+*   `menu` 🔊 **Home Screen:** High-energy driving synth — punchy bass, fast arpeggios, chord stabs.
+*   `space` 🔊 **Space Gameplay:** Eerie drone — sub-bass, tremolo pulses, slow cosmic arpeggios.
+*   `earth` 🔊 **Earth Gameplay:** Aerial combat — punchy bass, fast staccato lead melody.
+*   `fantasy` 🔊 **Fantasy Gameplay:** Orchestral — vibrato strings, harp cascades, deep cinematic bass.
 
-**Isolation guarantee:** Entering a level always stops the menu BGM. Returning to the main menu always stops all level music and restarts the menu track cleanly. No two tracks ever overlap.
+> 🔒 **Isolation Guard:** Toggling screens triggers a synchronized `stopBgMusic()` and `startBgMusic()` sequence. Level music cannot blend with menu music, even during rapid UI navigation.
 
-### 💥 Spaceship Destruction & Death SFX
-When HP reaches 0:
-1. **Ship sprite hides immediately** (no flickering ghost ship)
-2. **Multi-ring burst explosion** — 4 expanding concentric rings + 50 particles burst outward
-3. **White screen flash** — instant impact feedback
-4. **Death SFX plays** — synthesized "ta — ta ta ta tata — taa" rhythm using sawtooth oscillators:
-   - All gameplay SFX are silenced during the death sequence
-   - Rhythm pattern: `ta (pause) ta ta ta ta-ta (pause) taaaa`
-5. After ~1.5s, the **Game Over popup animates in**
+### 💥 Complete Destruction Sequence
+When your health pool strikes $0$, the engine pauses standard rendering and triggers a multi-stage cinematic sequence:
+1. **Instant Culling:** The player ship sprite vanishes immediately to prevent ghost-frame flickering.
+2. **Particle Blast:** Generates a **multi-ring burst explosion** displaying 4 expanding concentric rings alongside 50 physical velocity particles.
+3. **Screen Flash:** Flashes the browser viewport white for 1 frame to simulate high-impact feedback.
+4. **Retro Sound Synthesis:** Silences all standard gameplay sounds to play an audio rhythm pattern via raw sawtooth oscillators: `ta (pause) ta ta ta ta-ta (pause) taaaa`.
+5. **UI Ingress:** After exactly 1.5 seconds, the interactive Game Over pop-up smoothly animates into view.
 
-### ⚡ Powerup System
-Collect powerups by flying over them (drop every 8–12 seconds):
+### ⚡ Drop-System Powerups
+Dropped onto the battlefield every 8–12 seconds. Collect them by flying through them:
 
-| Icon | Powerup | Effect |
-|---|---|---|
-| ⚡ | Rapid Fire | Triple bullets, double fire rate for 5s |
-| 🛡 | Shield | Absorbs all damage for 5s |
-| 💥 | Nuke | Instantly destroys all enemies on screen |
-| ❄️ | Freeze | Slows all enemies and boss to 20% speed for 5s |
+| Icon | Powerup Type | Technical Performance |
+|:---:|---|---|
+| **⚡** | **Rapid Fire** | Splits weapon output into triple bullets and doubles fire rate for 5s. |
+| **🛡️** | **Shield** | Modifies the player damage mitigation multiplier to $0$ for 5s. |
+| **💥** | **Nuke** | Evaluates all active enemy objects on screen and calls their destruction methods instantly. |
+| **❄️** | **Freeze** | Drops enemy and boss velocity vectors down to $20\%$ of base speed for 5s. |
 
-### 💬 Combo System
-Kill enemies in quick succession to build combos. 3×+ combos multiply your score (up to 5×) and display a glowing **"Nx COMBO!"** banner.
-
-### 👾 Boss Encounters
-A boss spawns on a timer every ~40 seconds (shorter at higher levels). 2 seconds before it arrives, you receive automatic **Rapid Fire** as a warning gift.
-
-Boss attack patterns scale with tier:
-- **Tier 1–2:** Spread shots aimed at player
-- **Tier 3:** 360° bullet ring
-- **Tier 4:** Aimed spread + rotating spiral
-- **Tier 5+:** Aimed spread + spiral + random burst shots
+### 💬 Combo Matrix & Boss Encounters
+*   **Combo Meter:** Chain quick kills to stack multipliers up to $5\times$. High chains render a glowing, responsive **"Nx COMBO!"** UI banner over the canvas.
+*   **Boss Ingress:** Bosses spawn systematically every ~40 seconds. Exactly 2 seconds prior to arrival, the engine hands you a **Rapid Fire** buff as a warning. Boss bullet configurations change dramatically by tier:
+    *   *Tier 1–2:* Direct targeted spread shots.
+    *   *Tier 3:* Radial $360^{\circ}$ bullet rings.
+    *   *Tier 4:* Targeted spreads synchronized with a continuous rotating spiral.
+    *   *Tier 5+:* Full-grid chaos (Targeted spread + Spiral + Random burst vectors).
 
 ---
 
 ## 🕹️ Controls
 
-| Action | Key |
-|---|---|
-| Move | `W A S D` or `↑ ↓ ← →` |
-| Shoot | `Space` or `Left Click` |
-| Pause / Resume | `P` |
+| Action | Primary Key | Secondary Input |
+|---|---|---|
+| **Movement** | `W` `A` `S` `D` | `↑` `↓` `←` `→` Arrows |
+| **Primary Fire** | `Spacebar` | `Left Mouse Click` |
+| **Pause Engine** | `P` | — |
 
 ---
 
-## 🚀 How to Run
+## 🚀 Installation & Execution
 
-1. **Download** or clone this repo
-2. **Open** `index.html` in any modern browser (Chrome recommended)
-3. Type your commander name → choose your battlefield → launch!
+Because the game engine features absolute modular zero-dependency architecture, running it is simple:
 
-No build tools. No dependencies. No server needed. Pure HTML/CSS/JS.
+1. **Clone or Download** this repository.
+2. **Double-click** `index.html` to execute it directly inside any standard browser engine (Google Chrome highly recommended).
+3. Input your Pilot Name, choose your atmosphere, and launch.
 
----
-
-## 🏗️ Project Structure
-
-```
-nova-strike/
-├── index.html      ← Entire game (single file: HTML + CSS + JS)
-└── README.md       ← This file
-```
-
-The game is intentionally a **single self-contained file** — easy to share, host on GitHub Pages, or submit anywhere.
-
----
-
-## 🛠️ Technical Notes
-
-### Audio Engine
-Built entirely on the **Web Audio API** using oscillators, gain nodes, and LFO modulation — no external audio files needed. The `stopBgMusic()` / `startBgMusic()` isolation guard ensures tracks never stack or overlap, even when rapidly switching screens.
-
-### Level System
-Level progression is kill-based (not score-based), using the formula:
-```
-killsNeeded(level) = 10 + level × 4
-```
-This makes early levels feel achievable and later levels feel earned.
-
-### Death Explosion
-The burst animation uses a dedicated render loop separate from the main game loop, so it plays cleanly even after `gameRunning` is set to false. All particle ring positions are computed frame-by-frame via `requestAnimationFrame`.
-
-### Difficulty Scaling
-Enemy speed uses a linear interpolation:
-```
-speedMultiplier = 1.0 + (level - 1) × (1.8 / 19)
-```
-So at Level 1, enemies move at 1× speed. At Level 20, they move at 2.8× speed. Boss HP scales as `15 + level × 8`.
-
----
-
-## 🏆 BootCamp Context
-
-This game was built live during the **Vedam School of Technology × Amazon AI BootCamp 2** on June 28, 2026. The session demonstrated **vibe coding** — using natural English prompts to drive AI-assisted development, then iterating rapidly.
-
-The core lesson: *AI can write code, but a builder still needs to break the problem into logical components, know what to ask for, and have the creative vision to make it interesting.*
-
-> "Engineering always starts with problem solving. Even if domains are different — ethical hacker, data scientist, frontend dev — the one common part is: they have to be problem solvers."  
-> — Tanishq Gupta, SDE-2 @ Amazon
-
----
-
-## 👤 Author
-
-Built with Claude (Anthropic) as AI coding assistant.  
-Game design, feature specification, and creative direction by the student.
-
----
-
-## 📄 License
-
-Free to use, modify, and share. Go build something cool.
+```yaml
+No Build Tools. No Node Modules. No Webpack. No Local Server Required. Pure Vanilla Core.
